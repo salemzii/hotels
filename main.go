@@ -5,6 +5,7 @@ import (
 	"hotels/service"
 	_ "hotels/service"
 	"log"
+	"os"
 
 	"github.com/gin-gonic/gin"
 )
@@ -12,19 +13,7 @@ import (
 func main() {
 	router := service.SetupApi()
 
-	/*
-		config := cors.DefaultConfig()
-		 config.AllowOrigins = []string{"https://mybuks.netlify.app", "http://localhost:5174", "http://localhost:8891"}
-		config.AllowCredentials = true
-		config.AllowMethods = []string{"POST", "PUT", "GET", "OPTIONS"}
-		config.AllowHeaders = []string{"Origin", "Content-Type", "Accept"}
-
-		//config.AllowAllOrigins = true
-		//config.AllowCredentials = true
-		router.Use(cors.New(config))
-	*/
-
-	router.Run(":8891")
+	router.Run(fmt.Sprintf(":%s", os.Getenv("PORT")))
 }
 
 func CORS() gin.HandlerFunc {
