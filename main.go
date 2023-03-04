@@ -4,39 +4,19 @@ import (
 	"fmt"
 	"hotels/service"
 	_ "hotels/service"
-	"log"
 	"os"
-
-	"github.com/gin-gonic/gin"
 )
 
 func main() {
+
 	router := service.SetupApi()
+	// 2023-03-02 22:30:58.536929
+	// 2023-03-02 22:35:45.641686257 +0100 WAT m=+4.084937156
+	// 2023-03-02T22:35:45.000+07:00
+	// 2023-03-03T22:35:45.000+07:00
 
+	//  2023-03-02 23:30:08.0000
+	// 2023-03-03 23:30:08.0000
 	router.Run(fmt.Sprintf(":%s", os.Getenv("PORT")))
-}
 
-func CORS() gin.HandlerFunc {
-	return func(c *gin.Context) {
-
-		fmt.Println("I was here", c.Request.Header)
-		c.Writer.Header().Set("Access-Control-Allow-Origin", "*")
-		c.Writer.Header().Set("Access-Control-Allow-Credentials", "true")
-		c.Writer.Header().Set("Access-Control-Allow-Headers", "Content-Type, Content-Length, Accept-Encoding, X-CSRF-Token, Authorization, accept, Origin, Cache-Control, X-Requested-With")
-		//c.Writer.Header().Set("Access-Control-Allow-Methods", "POST, OPTIONS, GET, PUT, DELETE")
-		c.Writer.Header().Set("Access-Control-Allow-Methods", "PUT, DELETE")
-
-		if c.Request.Method == "OPTIONS" {
-			c.AbortWithStatus(204)
-			return
-		}
-
-		c.Next()
-	}
-}
-
-func hello() gin.HandlerFunc {
-	return func(ctx *gin.Context) {
-		log.Println("Hello salemzii")
-	}
 }

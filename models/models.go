@@ -53,6 +53,7 @@ type Reservation struct {
 	To_date     time.Time `json:"to_date"`
 	Bed_id      int       `json:"bed_id"`
 	Customer_id int       `json:"customer_id"`
+	Price       float64   `json:"price"`
 }
 
 type CreateCustomer struct {
@@ -60,4 +61,16 @@ type CreateCustomer struct {
 	Name         string        `json:"name"`
 	Agent_name   string        `json:"agent_name"`
 	Reservations []Reservation `json:"reservations"`
+}
+
+type CustomerReservation struct {
+	CustomerId    int
+	Name          string `json:"name"`
+	Agent_name    string `json:"agent_name"`
+	ReservationId int
+	From_date     time.Time `json:"from_date"`
+	To_date       time.Time `json:"to_date"`
+	Bed_id        int       `json:"bed_id"`
+	Customer_id   int       `json:"customer_id"`
+	Price         float64   `json:"price"`
 }

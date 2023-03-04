@@ -16,7 +16,6 @@ func SetupApi() *gin.Engine {
 	config := cors.DefaultConfig()
 	config.AllowOrigins = []string{"https://mybuks.netlify.app", "http://localhost:5174", "http://localhost:8891"}
 
-	//config.AllowAllOrigins = true
 	config.AllowCredentials = true
 	config.AllowMethods = []string{"POST", "PUT", "GET", "OPTIONS"}
 	config.AllowHeaders = []string{"Origin", "Content-Type", "Accept"}
@@ -45,8 +44,26 @@ func SetupApi() *gin.Engine {
 	router.PUT("/api/update/bed/:id")
 
 	router.POST("/api/create/reservation", CustomerBooking)
+	router.GET("/api/get/customer/:id/reservations", GetCustomerReservations)
 
 	return router
+}
+
+func CORS() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		c.Writer.Header().Set("Access-Control-Allow-Origin", "*")
+		c.Writer.Header().Set("Access-Control-Allow-Credentials", "true")
+		c.Writer.Header().Set("Access-Control-Allow-Headers", "Content-Type, Content-Length, Accept-Encoding, X-CSRF-Token, Authorization, accept, Origin, Cache-Control, X-Requested-With")
+		//c.Writer.Header().Set("Access-Control-Allow-Methods", "POST, OPTIONS, GET, PUT, DELETE")
+		c.Writer.Header().Set("Access-Control-Allow-Methods", "PUT, DELETE")
+
+		if c.Request.Method == "OPTIONS" {
+			c.AbortWithStatus(204)
+			return
+		}
+
+		c.Next()
+	}
 }
 
 func hello() gin.HandlerFunc {
@@ -506,7 +523,29 @@ func CustomerBooking(c *gin.Context) {
 			"resp": BookingResp,
 		})
 	}
+}
 
+func GetCustomerReservations(c *gin.Context) {
+	CustomerId, ok := c.Params.Get("id")
+	if !ok {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": "id not found",
+		})
+	}
+
+	id, _ := strconv.Atoi(CustomerId)
+
+	customers, err := HotelRepository.FetchCustomerReservations(id)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": err.Error(),
+		})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"customers": customers,
+	})
 }
 
 /* end customers */

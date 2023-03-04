@@ -74,16 +74,19 @@ var (
 	FetchFloorById       = `SELECT * FROM floors WHERE id=($1)`
 	FetchRoomById        = `SELECT * FROM rooms WHERE id=($1)`
 	FetchBedById         = `SELECT * FROM beds WHERE id=($1)`
+	FetchCustomerById    = `SELECT * FROM customers WHERE id=($1)`
 	FetchReservationById = `SELECT * FROM customer_reservations WHERE id=($1)`
 
 	FetchFloorByHotelId          = `SELECT * FROM floors WHERE hotel_id=($1)`
 	FetchRoomByFloorId           = `SELECT * FROM rooms WHERE floor_id=($1)`
 	FetchBedByRoomId             = `SELECT * FROM beds WHERE room_id=($1)`
 	FetchReservationByCustomerId = `SELECT * FROM customer_reservations WHERE customer_id=($1)`
+	FetchCustomerReservations = `SELECT * FROM customers JOIN customer_reservations ON ($1)=customer_id;`
 
 	FetchAvailableBedsByRoomId = `SELECT * FROM beds WHERE room_id=($1) AND status='cleaned'`
 	FetchOccupiedBedsByRoomId  = `SELECT * FROM beds WHERE room_id=($1) AND status='occupied'`
 	FetchCheckoutBedsByRoomId  = `SELECT * FROM beds WHERE room_id=($1) AND status='checkout'`
+
 
 	UpdateBedStatus = `
 		UPDATE beds
