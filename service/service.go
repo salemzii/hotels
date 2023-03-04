@@ -24,11 +24,13 @@ var (
 
 func init() {
 
-	if err := loadEnv(); err != nil {
-		panic(err)
-	}
+	/*
+		if err := loadEnv(); err != nil {
+			panic(err)
+		}
+	*/
 	Conn = os.Getenv("CONNECTION") //viper.GetString("CONNECTION"
-	
+
 	database, err := sql.Open("postgres", Conn)
 	if err != nil {
 		panic(err)
